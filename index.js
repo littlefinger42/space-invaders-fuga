@@ -6,8 +6,19 @@ const PatternFinder = require('./patternFinder.js');
 
 const args = process.argv.slice(2)
 
+const shape = [
+    ["-","-","-","o","o","-","-","-"],
+    ["-","-","o","o","o","o","-","-"],
+    ["-","o","o","o","o","o","o","-"],
+    ["o","o","-","o","o","-","o","o"],
+    ["o","o","o","o","o","o","o","o"],
+    ["-","-","o","-","-","o","-","-"],
+    ["-","o","-","o","o","-","o","-"],
+    ["o","-","o","-","-","o","-","o"]
+]
+
 if (checkArguements(args)) {
-    PatternFinder.init(args).then(PatternFinder => console.log(PatternFinder));
+    PatternFinder.init(args).then(PatternFinder => PatternFinder.detectShapes(shape));
 } else {
     return remindSyntax();
 }
