@@ -1,0 +1,14 @@
+{
+  "name": "space-invaders-fuga",
+  "version": "1.0.0",
+  "description": "Space Invaders finder, FUGA Job Application Assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Laurie Copley",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^2.4.2"
+  }
+}
