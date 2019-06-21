@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 
 module.exports = class PatternFinder {
@@ -19,13 +18,30 @@ module.exports = class PatternFinder {
                     remindSyntax();
                     return reject(err);
                 }
-
-                const mapCharacters = map.split(/\r?\n/).map(line => {
-                    return line.split('');
-                })
-
-                return resolve(mapCharacters)
+                return resolve(map.split(/\r?\n/))
             });
         })
+    }
+    detectShapes(shape) {
+        var heightSearchLimit = this.map.length - shape.length + 1;
+
+        for (var i = 0; i < heightSearchLimit; i++) {
+            var j = 0;
+            var regexp = new RegExp(shape[j])
+            var match = this.map[i + j].match(regexp);
+            var initialIndex = match ? match.index : undefined;
+
+            
+            while (match && initialIndex === match.index) {
+                if (j + 1 === shape.length) return {
+                    line: i,
+                    char: match.index
+                };
+                j++
+                regexp = new RegExp(shape[j]);
+                match = this.map[i + j].match(regexp);
+            }
+        }
+        return null;
     }
 }
