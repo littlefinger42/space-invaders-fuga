@@ -1,6 +1,7 @@
 const chalk = require('chalk');
 const chalkError = chalk.bold.red;
 const chalkWarning = chalk.bold.yellow;
+const chalkSuccess = chalk.bold.green;
 
 const PatternFinder = require('./patternFinder.js');
 
@@ -29,7 +30,18 @@ const shape2 = [
 ]
 
 if (checkArguements(args)) {
-    PatternFinder.init(args).then(PatternFinder => PatternFinder.detectShapes(shape2));
+    PatternFinder.init(args).then(PatternFinder => {
+        const detectionResult = PatternFinder.detectShapes(shape2);
+        if (detectionResult) {
+            console.log(chalkSuccess('Pattern found!'));
+            console.log(`Line: ${detectionResult.line} Character: ${detectionResult.char}`);
+            return true;
+        } else {
+            return console.log(chalkError('No pattern found.'));
+            return false;
+        }
+
+    });
 } else {
     return remindSyntax();
 }
