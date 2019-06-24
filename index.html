@@ -8,11 +8,10 @@
     <title>Space Invader Finder</title>
     <meta name="description" content="Space Invader Finder">
     <meta name="author" content="Laurie Copley">
-    <script src="js/patternFinder.js"></script>
     <style>
-        .wrapper {
-            display: flexbox;
-            flex-direction: column;
+        .list-preview {
+            list-style: none;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -24,14 +23,14 @@
             tincidunt eu augue sit amet, tincidunt vulputate elit. Lorem ipsum dolor sit amet, consectetur adipiscing
             elit. In nulla ipsum, efficitur a facilisis lacinia, mollis auctor libero. Vivamus faucibus aliquam leo ut
             dapibus. Nullam scelerisque tempor mattis. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
-        <form action="">
-            <div><label for="shape">Shape:</label><input type="file" id="shape" name="shape" required accept=".txt" />
-            </div>
-            <div><label for="map">Map:</label><input type="file" id="map" name="map" required accept=".txt" /></div>
-            <button>Submit</button>
-        </form>
-        <ul id="shapePreview"></ul>
-        <ul id="mapPreview"></ul>
+
+        <div><label for="shape">Shape:</label><input type="file" id="shape" name="shape" required accept=".txt" />
+        </div>
+        <div><label for="map">Map:</label><input type="file" id="map" name="map" required accept=".txt" /></div>
+        <button onclick="return patternFinder.detectShapes()">Submit</button>
+
+        <ul id="shapePreview" class="list-preview"></ul>
+        <ul id="mapPreview" class="list-preview"></ul>
     </div>
     <script>
         if (window.File && window.FileReader) {
@@ -82,12 +81,35 @@
                     while ($element.hasChildNodes()) {
                         $element.removeChild($element.firstChild);
                     }
-                    
+
                     lines.forEach(line => {
                         let li = document.createElement('li');
                         li.textContent = line;
                         $element.appendChild(li);
                     })
+                },
+                detectShapes: function () {
+                    console.log('detecting shapes');
+                    const heightSearchLimit = this.mapArray.length - this.shapeArray.length + 1;
+
+                    for (let i = 0; i < heightSearchLimit; i++) {
+                        let j = 0;
+                        let regexp = new RegExp(this.shapeArray[j])
+                        let match = this.mapArray[i + j].match(regexp);
+                        const initialIndex = match ? match.index : undefined;
+
+
+                        while (match && initialIndex === match.index) {
+                            if (j + 1 === this.shapeArray.length) return {
+                                line: i,
+                                char: match.index
+                            };
+                            j++
+                            regexp = new RegExp(this.shapeArray[j]);
+                            match = this.mapArray[i + j].match(regexp);
+                        }
+                    }
+                    return null;
                 }
             }
 
