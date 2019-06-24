@@ -15,10 +15,10 @@ if (checkArguements(args)) {
             console.log(`Line: ${detectionResult.line} Character: ${detectionResult.char}`);
             return true;
         } else {
-            return console.log(chalkError('No pattern found.'));
+            return console.error(chalkError('No pattern found.'));
         }
     }).catch(err => {
-        console.log(err);
+        console.error(err);
         remindSyntax();
     });
 } else {
