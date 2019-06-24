@@ -22,13 +22,13 @@ module.exports = class PatternFinder {
         })
     }
     detectShapes() {
-        var heightSearchLimit = this.map.length - this.shape.length + 1;
+        const heightSearchLimit = this.map.length - this.shape.length + 1;
 
-        for (var i = 0; i < heightSearchLimit; i++) {
-            var j = 0;
-            var regexp = new RegExp(this.shape[j])
-            var match = this.map[i + j].match(regexp);
-            var initialIndex = match ? match.index : undefined;
+        for (let i = 0; i < heightSearchLimit; i++) {
+            let j = 0;
+            let regexp = new RegExp(this.shape[j])
+            let match = this.map[i + j].match(regexp);
+            const initialIndex = match ? match.index : undefined;
 
             
             while (match && initialIndex === match.index) {
