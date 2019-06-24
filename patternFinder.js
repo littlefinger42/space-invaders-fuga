@@ -1,44 +1,43 @@
 const fs = require('fs');
 
 module.exports = class PatternFinder {
-    constructor(args, mapArray) {
+    constructor(mapArray, shapeArray) {
         if (typeof mapArray === 'undefined') throw new Error('Cannot call PatternFinder directly. Must use init()');
-        this.bgChar = args[0];
-        this.bgChar = args[1];
         this.map = mapArray;
+        this.shape = shapeArray;
     }
-    static async init(args) {
-        const mapArray = await this.getMapArray(args[2]);
-        return new PatternFinder(args, mapArray)
+    static async init(mapPath, shapePath) {
+        const mapArray = await this.getArrayFromTxt(mapPath);
+        const shapeArray = await this.getArrayFromTxt(shapePath);
+        return new PatternFinder(mapArray, shapeArray)
     }
-    static getMapArray(mapPath) {
+    static getArrayFromTxt(mapPath) {
         return new Promise((resolve, reject) => {
             fs.readFile(mapPath, 'utf8', (err, map) => {
                 if (err) {
-                    remindSyntax();
                     return reject(err);
                 }
                 return resolve(map.split(/\r?\n/))
             });
         })
     }
-    detectShapes(shape) {
-        var heightSearchLimit = this.map.length - shape.length + 1;
+    detectShapes() {
+        var heightSearchLimit = this.map.length - this.shape.length + 1;
 
         for (var i = 0; i < heightSearchLimit; i++) {
             var j = 0;
-            var regexp = new RegExp(shape[j])
+            var regexp = new RegExp(this.shape[j])
             var match = this.map[i + j].match(regexp);
             var initialIndex = match ? match.index : undefined;
 
             
             while (match && initialIndex === match.index) {
-                if (j + 1 === shape.length) return {
+                if (j + 1 === this.shape.length) return {
                     line: i,
                     char: match.index
                 };
                 j++
-                regexp = new RegExp(shape[j]);
+                regexp = new RegExp(this.shape[j]);
                 match = this.map[i + j].match(regexp);
             }
         }
